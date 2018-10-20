@@ -41,16 +41,18 @@ CPP_FLAGS = -Wno-non-virtual-dtor \
 	-fno-rtti \
 	-std=c++11
 #
-HX_SO = Release/smsdk_ext.o \
+HX_SO = Release/geoip_util.o \
+	Release/smsdk_ext.o \
 	Release/extension.o
 #
 all:
 	mkdir -p Release
 	ln -sf $(HX_SOURCEMOD)/public/smsdk_ext.cpp
 #
-	gcc-6 $(HX_INCLUDE) $(HX_QWERTY) $(CPP_FLAGS) -o Release/smsdk_ext.o -c smsdk_ext.cpp
-	gcc-6 $(HX_INCLUDE) $(HX_QWERTY) $(CPP_FLAGS) -o Release/extension.o -c extension.cpp
+	gcc $(HX_INCLUDE) $(HX_QWERTY) $(CPP_FLAGS) -o Release/geoip_util.o -c geoip_util.cpp
+	gcc $(HX_INCLUDE) $(HX_QWERTY) $(CPP_FLAGS) -o Release/smsdk_ext.o -c smsdk_ext.cpp
+	gcc $(HX_INCLUDE) $(HX_QWERTY) $(CPP_FLAGS) -o Release/extension.o -c extension.cpp
 #
-	gcc-6 $(HX_SO) data-pool.c maxminddb.c -static-libgcc -shared -m32 -lm -ldl -o Release/geoip.ext.so
+	gcc $(HX_SO) data-pool.c maxminddb.c -static-libgcc -shared -m32 -lm -ldl -o Release/geoip.ext.so
 #
 	rm -rf Release/*.o

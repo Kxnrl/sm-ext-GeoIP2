@@ -61,6 +61,7 @@
   <ItemGroup>
     <ClCompile Include="..\data-pool.c" />
     <ClCompile Include="..\maxminddb.c" />
+    <ClCompile Include="..\geoip_util.cpp" />
     <ClCompile Include="..\extension.cpp" />
     <ClCompile Include="..\..\sourcemod\public\smsdk_ext.cpp" />
   </ItemGroup>
@@ -69,6 +70,7 @@
     <ClInclude Include="..\maxminddb.h" />
     <ClInclude Include="..\maxminddb_config.h" />
     <ClInclude Include="..\maxminddb-compat-util.h" />
+    <ClCompile Include="..\geoip_util.h" />
     <ClInclude Include="..\extension.h" />
     <ClInclude Include="..\smsdk_config.h" />
     <ClInclude Include="..\..\sourcemod\public\smsdk_ext.h" />

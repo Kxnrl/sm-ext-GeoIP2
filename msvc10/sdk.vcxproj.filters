@@ -24,6 +24,9 @@
     <ClCompile Include="..\maxminddb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\geoip_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\extension.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\maxminddb-compat-util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\geoip_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\extension.h">
