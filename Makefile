@@ -53,6 +53,6 @@ all:
 	gcc $(HX_INCLUDE) $(HX_QWERTY) $(CPP_FLAGS) -o Release/smsdk_ext.o -c smsdk_ext.cpp
 	gcc $(HX_INCLUDE) $(HX_QWERTY) $(CPP_FLAGS) -o Release/extension.o -c extension.cpp
 #
-	gcc $(HX_SO) data-pool.c maxminddb.c -static-libgcc -shared -m32 -lm -ldl -o Release/geoip.ext.so
+	gcc $(HX_SO) data-pool.c maxminddb.c -static-libgcc -shared -m32 -lm -ldl -o Release/geoip2.ext.so
 #
 	rm -rf Release/*.o

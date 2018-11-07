@@ -1,15 +1,10 @@
 # GeoIP2
 This is a rewritten geoip extension from the SourceMod distribution for the new database format from MaxMind `.mmdb`.
 
-## Installation
-1. Download latest release version.
-2. Extract all files from the archive with replacement to your game server.
-3. Download last database [GeoLite2-City.mmdb](http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz) or [GeoLite2-Country.mmdb](http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz) and put to path `addons/sourcemod/configs/geoip/`
-4. Recompile all plugins that use `geoip.inc`.
 
 ## Natives
 
-```javascript
+``` sourcepawn
 /**
  * @section IP addresses can contain ports, the ports will be stripped out.
  */
@@ -104,3 +99,8 @@ native bool GeoipRegion(const char[] ip, char[] name, int maxlength, const char[
  */
 native bool GeoipCity(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
 ```
+
+### Credits:  
+- Original GeoIP2 SDK: [MaxMind](https://maxmind.com "maxmind")  
+- Original GeoIP  EXT: [Alliedmodders](https://github.com/alliedmodders/sourcemod "alliedmodders")  
+- Original GeoIP2 EXT: [Accelerator74](https://github.com/Accelerator74/GeoIP2 "GeoIP2")  

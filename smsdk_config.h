@@ -8,13 +8,13 @@
 
 /* Basic information exposed publicly */
 #define SMEXT_CONF_NAME			"GeoIP2"
-#define SMEXT_CONF_DESCRIPTION		"Geographical IP information"
-#define SMEXT_CONF_VERSION		"1.1.1"
-#define SMEXT_CONF_AUTHOR		"Accelerator, AlliedModders LLC"
-#define SMEXT_CONF_URL			"https://github.com/Accelerator74/GeoIP2"
+#define SMEXT_CONF_DESCRIPTION	"Geographical IP information"
+#define SMEXT_CONF_VERSION		"1.1.2"
+#define SMEXT_CONF_AUTHOR		"Kyle, Accelerator, AlliedModders LLC"
+#define SMEXT_CONF_URL			"https://github.com/Kxnrl/GeoIP2"
 #define SMEXT_CONF_LOGTAG		"GEOIP2"
 #define SMEXT_CONF_LICENSE		"GPL"
-#define SMEXT_CONF_DATESTRING		__DATE__
+#define SMEXT_CONF_DATESTRING	__DATE__
 
 /** 
  * @brief Exposes plugin's main interface.
