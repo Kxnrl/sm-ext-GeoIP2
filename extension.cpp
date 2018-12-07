@@ -43,7 +43,7 @@ bool GeoIP_Extension::SDK_OnLoad(char *error, size_t maxlength, bool late)
 
 	if (status != MMDB_SUCCESS)
 	{
-		ke::SafeStrcpy(error, maxlength, "Could not find GeoIP2 databases.");
+		ke::SafeStrcpy(error, maxlength, "Could not find GeoIP2 databases. download url -> https://dev.maxmind.com/geoip/geoip2/geolite2 .");
 		return false;
 	}
 
@@ -55,22 +55,6 @@ bool GeoIP_Extension::SDK_OnLoad(char *error, size_t maxlength, bool late)
 	strftime(date, 40, "%F %T UTC", gmtime(&epoch));
 
 	g_pSM->LogMessage(myself, "GeoIP2 database loaded: %s (%s)", mmdb.metadata.database_type, date);
-
-	char buf[64];
-	for (size_t i = 0; i < mmdb.metadata.languages.count; i++)
-	{
-		if (i == 0)
-		{
-			strcpy(buf, mmdb.metadata.languages.names[i]);
-		}
-		else
-		{
-			strcat(buf, " ");
-			strcat(buf, mmdb.metadata.languages.names[i]);
-		}
-	}
-
-	g_pSM->LogMessage(myself, "GeoIP2 supported languages: %s", buf);
 
 	return true;
 }
@@ -259,15 +243,15 @@ static cell_t sm_Geoip_City(IPluginContext *pCtx, const cell_t *params)
 
 const sp_nativeinfo_t geoip_natives[] = 
 {
-	{"GeoipCode2",			sm_Geoip_Code2},
-	{"GeoipCode3",			sm_Geoip_Code3},
-	{"GeoipContinentCode",		sm_Geoip_ContinentCode},
-	{"GeoipRegionCode",		sm_Geoip_RegionCode},
-	{"GeoipTimezone",		sm_Geoip_Timezone},
-	{"GeoipCountry",		sm_Geoip_Country},
-	{"GeoipContinent",		sm_Geoip_Continent},
-	{"GeoipRegion",			sm_Geoip_Region},
-	{"GeoipCity",			sm_Geoip_City},
-	{NULL,					NULL},
+	{"GeoIP2_Code2",			sm_Geoip_Code2},
+	{"GeoIP2_Code3",			sm_Geoip_Code3},
+	{"GeoIP2_ContinentCode",	sm_Geoip_ContinentCode},
+	{"GeoIP2_RegionCode",		sm_Geoip_RegionCode},
+	{"GeoIP2_Timezone",		    sm_Geoip_Timezone},
+	{"GeoIP2_Country",		    sm_Geoip_Country},
+	{"GeoIP2_Continent",		sm_Geoip_Continent},
+	{"GeoIP2_Region",			sm_Geoip_Region},
+	{"GeoIP2_City",			    sm_Geoip_City},
+	{NULL,					    NULL},
 };
 
