@@ -2,7 +2,7 @@
 #include "geoip_util.h"
 
 #ifdef _WIN32
-#pragma ("ws2_32.lib")
+#pragma comment(lib, "ws2_32.lib")
 #endif
 
 /**
