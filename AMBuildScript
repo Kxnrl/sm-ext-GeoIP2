@@ -1,8 +1,6 @@
 # vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
 import os, sys
 
-# Simple extensions do not need to modify this file.
-
 def ResolveEnvPath(env, folder):
   if env in os.environ:
     path = os.environ[env]
@@ -48,6 +46,7 @@ class ExtensionConfig(object):
 
     if not self.sm_root or not os.path.isdir(self.sm_root):
       raise Exception('Could not find a source copy of SourceMod')
+
     self.sm_root = Normalize(self.sm_root)
 
   def configure(self):
@@ -58,7 +57,7 @@ class ExtensionConfig(object):
     elif cxx.vendor == 'msvc':
       self.configure_msvc(cxx)
 
-    # Optimizaiton
+    # Optimization
     if builder.options.opt == '1':
       cxx.defines += ['NDEBUG']
 
@@ -67,11 +66,11 @@ class ExtensionConfig(object):
       cxx.defines += ['DEBUG', '_DEBUG']
 
     # Platform-specifics
-    if builder.target_platform == 'linux':
+    if cxx.target.platform == 'linux':
       self.configure_linux(cxx)
-    elif builder.target_platform == 'mac':
+    elif cxx.target.platform == 'mac':
       self.configure_mac(cxx)
-    elif builder.target_platform == 'windows':
+    elif cxx.target.platform == 'windows':
       self.configure_windows(cxx)
 
     # Finish up.
@@ -102,14 +101,13 @@ class ExtensionConfig(object):
       '-fvisibility=hidden',
     ]
     cxx.cxxflags += [
-      '-std=c++11',
+      '-std=c++14',
       '-fno-exceptions',
       '-fno-threadsafe-statics',
       '-Wno-non-virtual-dtor',
       '-Wno-overloaded-virtual',
       '-fvisibility-inlines-hidden',
     ]
-    cxx.linkflags += ['-m32']
 
     have_gcc = cxx.vendor == 'gcc'
     have_clang = cxx.vendor == 'clang'
@@ -123,6 +121,8 @@ class ExtensionConfig(object):
       cxx.cxxflags += ['-Wno-delete-non-virtual-dtor']
     if cxx.version >= 'gcc-4.8':
       cxx.cflags += ['-Wno-unused-result']
+    if cxx.version >= 'gcc-9.0':
+      cxx.cxxflags += ['-Wno-class-memaccess', '-Wno-packed-not-aligned']
 
     if have_clang:
       cxx.cxxflags += ['-Wno-implicit-exception-spec-mismatch']
@@ -134,13 +134,12 @@ class ExtensionConfig(object):
 
     if have_gcc:
       cxx.cflags += ['-mfpmath=sse']
+      cxx.cflags += ['-Wno-maybe-uninitialized']
 
     if builder.options.opt == '1':
       cxx.cflags += ['-O3']
 
-    #if builder.options.lto == '1':
-    #  cxx.cflags += ['-flto', '-fPIC']
-    #  cxx.linkflags += ['-flto', '-fuse-ld=gold']
+    cxx.cflags += ['-fno-omit-frame-pointer']
 
   def configure_msvc(self, cxx):
     if builder.options.debug == '1':
@@ -184,10 +183,6 @@ class ExtensionConfig(object):
 
     if builder.options.debug == '1':
       cxx.cflags += ['/Od', '/RTC1']
-	  
-    #if builder.options.lto == '1':
-    #  cxx.cflags += ['/GL']
-    #  cxx.linkflags += ['/LTCG']
 
     # This needs to be after our optimization flags which could otherwise disable it.
     # Don't omit the frame pointer.
@@ -203,22 +198,20 @@ class ExtensionConfig(object):
 
   def configure_mac(self, cxx):
     cxx.defines += ['OSX', '_OSX', 'POSIX']
-    cxx.cflags += ['-mmacosx-version-min=10.5']
+    cxx.cflags += ['-mmacosx-version-min=10.7']
     cxx.linkflags += [
-      '-mmacosx-version-min=10.5',
-      '-arch', 'i386',
-      '-lstdc++',
-      '-stdlib=libstdc++',
+      '-mmacosx-version-min=10.7',
+      '-lc++',
+      '-stdlib=libc++',
     ]
-    cxx.cxxflags += ['-stdlib=libstdc++']
+    cxx.cxxflags += ['-stdlib=libc++']
 
   def configure_windows(self, cxx):
     cxx.defines += ['WIN32', '_WINDOWS']
-	
+
   def ConfigureForExtension(self, context, compiler):
     compiler.cxxincludes += [
       os.path.join(context.currentSourcePath),
-      os.path.join(context.currentSourcePath, 'sdk'),
       os.path.join(self.sm_root, 'public'),
       os.path.join(self.sm_root, 'public', 'extensions'),
       os.path.join(self.sm_root, 'sourcepawn', 'include'),
@@ -230,6 +223,10 @@ class ExtensionConfig(object):
 Extension = ExtensionConfig()
 Extension.detectSDKs()
 Extension.configure()
+
+# This will clone the list and each cxx object as we recurse, preventing child
+# scripts from messing up global state.
+builder.targets = builder.CloneableList(Extension.all_targets)
 
 # Add additional buildscripts here
 BuildScripts = [
