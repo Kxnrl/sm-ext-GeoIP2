@@ -1,5 +1,6 @@
 # GeoIP2
 This is a rewritten geoip extension from the SourceMod distribution for the new database format from MaxMind `.mmdb`.
+Redux edition by Kxnrl.  
   
   
 ## Installation
@@ -21,7 +22,7 @@ This is a rewritten geoip extension from the SourceMod distribution for the new 
  * @param ccode			Destination string buffer to store the code.
  * @return				True on success, false if no country found.
  */
-native bool GeoipCode2(const char[] ip, char ccode[3]);
+native bool GeoIP2_Code2(const char[] ip, char ccode[3]);
 
 /**
  * Gets the three character country code from an IP address. (USA, CAN, etc)
@@ -30,7 +31,7 @@ native bool GeoipCode2(const char[] ip, char ccode[3]);
  * @param ccode			Destination string buffer to store the code.
  * @return				True on success, false if no country found.
  */
-native bool GeoipCode3(const char[] ip, char ccode[4]);
+native bool GeoIP2_Code3(const char[] ip, char ccode[4]);
 
 /**
  * Gets the two character continent code from an IP address. (EU, AS, etc)
@@ -39,7 +40,7 @@ native bool GeoipCode3(const char[] ip, char ccode[4]);
  * @param ccode			Destination string buffer to store the code.
  * @return				True on success, false if no continent found.
  */
-native bool GeoipContinentCode(const char[] ip, char ccode[3]);
+native bool GeoIP2_ContinentCode(const char[] ip, char ccode[3]);
 
 /**
  * Gets the two/three region code from an IP address. (IL, CHE, etc)
@@ -48,7 +49,7 @@ native bool GeoipContinentCode(const char[] ip, char ccode[3]);
  * @param ccode			Destination string buffer to store the code.
  * @return				True on success, false if no region found.
  */
-native bool GeoipRegionCode(const char[] ip, char ccode[4]);
+native bool GeoIP2_RegionCode(const char[] ip, char ccode[4]);
 
 /**
  * Gets the timezone. (max length of output string is 45)
@@ -58,7 +59,7 @@ native bool GeoipRegionCode(const char[] ip, char ccode[4]);
  * @param maxlength			Maximum length of output string buffer.
  * @return				True on success, false if no timezone found.
  */
-native bool GeoipTimezone(const char[] ip, char[] name, int maxlength);
+native bool GeoIP2_Timezone(const char[] ip, char[] name, int maxlength);
 
 /**
  * Gets the full country name. (max length of output string is 45)
@@ -69,7 +70,7 @@ native bool GeoipTimezone(const char[] ip, char[] name, int maxlength);
  * @param lang			Which language to the output of result the geoip2 lookup.
  * @return				True on success, false if no country found.
  */
-native bool GeoipCountry(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
+native bool GeoIP2_Country(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
 
 /**
  * Gets the full continent name. (max length of output string is 45)
@@ -80,7 +81,7 @@ native bool GeoipCountry(const char[] ip, char[] name, int maxlength, const char
  * @param lang			Which language to the output of result the geoip2 lookup.
  * @return				True on success, false if no continent found.
  */
-native bool GeoipContinent(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
+native bool GeoIP2_Continent(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
 
 /**
  * Gets the full region name. (max length of output string is 45)
@@ -91,7 +92,7 @@ native bool GeoipContinent(const char[] ip, char[] name, int maxlength, const ch
  * @param lang			Which language to the output of result the geoip2 lookup.
  * @return				True on success, false if no region found.
  */
-native bool GeoipRegion(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
+native bool GeoIP2_Region(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
 
 /**
  * Gets the city name. (max length of output string is 45)
@@ -102,7 +103,7 @@ native bool GeoipRegion(const char[] ip, char[] name, int maxlength, const char[
  * @param lang			Which language to the output of result the geoip2 lookup.
  * @return				True on success, false if no city found.
  */
-native bool GeoipCity(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
+native bool GeoIP2_City(const char[] ip, char[] name, int maxlength, const char[] lang = "en");
 ```
   
   
