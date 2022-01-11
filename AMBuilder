@@ -1,24 +1,23 @@
 # vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
-iimport os
-
-projectName = 'geoip2'
+import os
 
 for cxx in builder.targets:
-  binary = Extension.Library(builder, cxx, projectName + '.ext')
+  binary = Extension.Library(builder, cxx, 'geoip2.ext')
 
   binary.sources += [
     'extension.cpp',
     'data-pool.c',
     'geoip_util.cpp',
     'maxminddb.c',
-    os.path.join(Extension.sm_root, 'public', 'smsdk_ext.cpp')
+    os.path.join(Extension.sm_root, 'public', 'smsdk_ext.cpp'),
   ]
 
   if binary.compiler.family == 'gcc' or binary.compiler.family == 'clang':
     binary.compiler.cxxflags += ['-fno-rtti']
   elif binary.compiler.family == 'msvc':
     binary.compiler.cxxflags += ['/GR-']
+
   if binary.compiler.target.platform == 'windows':
-    binary.compiler.postlink += ['wsock32.lib', 'ws2_32.lib']
+    binary.compiler.postlink += ['ws2_32.lib']
 
   Extension.extensions += [builder.Add(binary)]
