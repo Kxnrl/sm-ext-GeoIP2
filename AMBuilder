@@ -15,12 +15,12 @@ binary.sources += [
 
 binary.compiler.defines += ['SOURCEMOD_BUILD']
 
-if binary.compiler.family == 'gcc' or binary.compiler.family == 'clang':
+if binary.compiler.like('gcc') or binary.compiler.like('clang'):
   binary.compiler.cxxflags += ['-fno-rtti']
-elif binary.compiler.family == 'msvc':
+elif binary.compiler.like('msvc'):
   binary.compiler.cxxflags += ['/GR-']
 
-if binary.compiler.target.platform == 'windows':
-  binary.compiler.postlink += ['ws2_32.lib']
+if sys.platform == 'windows':
+  binary.compiler.linkflags += ['ws2_32.lib']
 
 Extension.extensions += [builder.Add(binary)]
