@@ -119,5 +119,5 @@ native bool GeoipCity(const char[] ip, char[] name, int maxlength, const char[] 
   
 ### Credits:  
 - Original GeoIP2 SDK: [MaxMind](https://maxmind.com "maxmind")  
-- Original GeoIP  EXT: [Alliedmodders](https://github.com/alliedmodders/sourcemod "alliedmodders")  
-- Original GeoIP2 EXT: [Accelerator74](https://github.com/Accelerator74/GeoIP2 "GeoIP2")  
+- Original GeoIP  EXT: [Alliedmodders](https://github.com/alliedmodders/sourcemod "Alliedmodders")  
+- Original GeoIP2 EXT: [Accelerator74](https://github.com/Accelerator74 "Accelerator74")  

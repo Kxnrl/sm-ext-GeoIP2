@@ -1,6 +1,10 @@
 #include "extension.h"
 #include "geoip_util.h"
 
+#ifdef _WIN32
+#pragma ("ws2_32.lib")
+#endif
+
 /**
  * @file extension.cpp
  * @brief Implement extension code here.
