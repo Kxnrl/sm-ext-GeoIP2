@@ -3,18 +3,17 @@ iimport os, sys
 
 projectName = 'geoip2'
 
-project = Extension.HL2Project(builder, projectName + '.ext')
-
-project.sources += [
-  'extension.cpp',
-  'data-pool.c',
-  'geoip_util.cpp',
-  'maxminddb.c',
-  os.path.join(Extension.sm_root, 'public', 'smsdk_ext.cpp')
-]
-
 for cxx in builder.targets:
-  binary = SM.ExtLibrary(builder, cxx, 'geoip.ext')
+  binary = Extension.Library(builder, cxx, 'geoip.ext')
+
+  binary.sources += [
+    'extension.cpp',
+    'data-pool.c',
+    'geoip_util.cpp',
+    'maxminddb.c',
+    os.path.join(Extension.sm_root, 'public', 'smsdk_ext.cpp')
+  ]
+
   if binary.compiler.family == 'gcc' or binary.compiler.family == 'clang':
     binary.compiler.cxxflags += ['-fno-rtti']
   elif binary.compiler.family == 'msvc':
