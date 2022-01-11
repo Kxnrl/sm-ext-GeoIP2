@@ -1,21 +1,33 @@
 # vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
-import os
+import os, sys
 
 projectName = 'geoip2'
 
-project = Extension.HL2Project(builder, projectName + '.ext')
-project.sources += [
+# smsdk_ext.cpp will be automatically added later
+sourceFiles = [
   'extension.cpp',
   'data-pool.c',
   'geoip_util.cpp',
   'maxminddb.c',
-  os.path.join(Extension.sm_root, 'public', 'smsdk_ext.cpp')
 ]
+
+###############
+# Make sure to edit PackageScript, which copies your files to their appropriate locations
+# Simple extensions do not need to modify past this point.
+
+project = Extension.HL2Project(builder, projectName + '.ext')
+
+project.sources += sourceFiles
 
 for sdk_name in Extension.sdks:
   sdk = Extension.sdks[sdk_name]
   
   binary = Extension.HL2Config(project, projectName + '.ext.' + sdk.ext, sdk)
+  binary.compiler.defines += ['META_NO_HL2SDK', 'SOURCEMOD_BUILD', 'VERSION_SAFE_STEAM_API_INTERFACES']
+
+  binary.sources += [
+    os.path.join(Extension.sm_root, 'public', 'smsdk_ext.cpp')
+  ]
 
   if binary.compiler.family == 'gcc' or binary.compiler.family == 'clang':
     binary.compiler.cxxflags += ['-fno-rtti']
