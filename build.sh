@@ -26,6 +26,6 @@ git clone https://github.com/alliedmodders/sourcemod --recursive --branch $SMBRA
 mkdir -p "$EXT_DIR/build"
 pushd "$EXT_DIR/build"
 export CC=clang-10;export CXX=clang++-10;
-python "$EXT_DIR/configure.py" --enable-optimize --sm-path "$EXT_DIR/sourcemod"
+python "$EXT_DIR/configure.py" --enable-optimize --sm-path "$EXT_DIR/sourcemod" --targets=x86
 ambuild
 popd
