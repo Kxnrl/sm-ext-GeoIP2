@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: master
+    tags-ignore: 
+      - Release*
+      - Deploy*
+  pull_request:
+    branches: '*'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        sourcemod-version: [1.10-dev]
+        include:
+          - os: ubuntu-latest
+            target-archs: x86
+
+          - os: windows-latest
+            target-archs: x86
+
+    steps:
+      - name: Install Linux packages
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt update
+          sudo apt install -yq --no-install-recommends g++-multilib
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: extension
+
+      - name: Checkout SourceMod
+        uses: actions/checkout@v2
+        with:
+          repository: alliedmodders/sourcemod
+          ref: ${{ matrix.sourcemod-version }}
+          path: sourcemod
+          submodules: recursive
+
+      - name: Checkout AMBuild
+        uses: actions/checkout@v2
+        with:
+          repository: alliedmodders/ambuild
+          path: ambuild
+
+      - name: Install AMBuild
+        uses: BSFishy/pip-action@v1
+        with:
+          packages: ./ambuild
+
+      - name: Build
+        working-directory: extension
+        shell: bash
+        run: |
+          mkdir build && cd build
+          python ../configure.py --enable-optimize --targets=${{ matrix.target-archs }}
+          ambuild
