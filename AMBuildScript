@@ -1,5 +1,5 @@
 # vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
-import os, sys
+import os
 
 def ResolveEnvPath(env, folder):
   if env in os.environ:
@@ -22,11 +22,40 @@ def ResolveEnvPath(env, folder):
 def Normalize(path):
   return os.path.abspath(os.path.normpath(path))
 
+def SetArchFlags(compiler):
+  if compiler.behavior == 'gcc':
+    if compiler.target.arch == 'x86_64':
+      compiler.cflags += ['-fPIC']
+  elif compiler.like('msvc'):
+    if compiler.target.arch == 'x86_64':
+      compiler.defines += ['WIN64']
+
 class ExtensionConfig(object):
   def __init__(self):
-    self.binaries = []
     self.extensions = []
     self.sm_root = None
+    self.all_targets = []
+    self.target_archs = set()
+
+    if builder.options.targets:
+      target_archs = builder.options.targets.split(',')
+    else:
+      target_archs = ['x86']
+
+    for arch in target_archs:
+        try:
+            cxx = builder.DetectCxx(target_arch = arch)
+            self.target_archs.add(cxx.target.arch)
+        except Exception as e:
+            # Error if archs were manually overridden.
+            if builder.options.targets:
+                raise
+            print('Skipping target {}: {}'.format(arch, e))
+            continue
+        self.all_targets.append(cxx)
+
+    if not self.all_targets:
+        raise Exception('No suitable C/C++ compiler was found.')
 
   @property
   def tag(self):
@@ -34,7 +63,7 @@ class ExtensionConfig(object):
       return 'Debug'
     return 'Release'
 
-  def detectSDKs(self):
+  def detectSourceMod(self):
     if builder.options.sm_path:
       self.sm_root = builder.options.sm_path
     else:
@@ -50,11 +79,23 @@ class ExtensionConfig(object):
     self.sm_root = Normalize(self.sm_root)
 
   def configure(self):
-    cxx = builder.DetectCompilers()
+    for cxx in self.all_targets:
+        self.configure_cxx(cxx)
+
+  def configure_cxx(self, cxx):
+    if cxx.family == 'msvc':
+      if cxx.version < 1900:
+        raise Exception('MSVC 2015 or later is required.')
+    elif cxx.family == 'gcc':
+      if cxx.version < 'gcc-4.9':
+        raise Exception('GCC 4.9 or later is required.')
+    elif cxx.family == 'clang':
+      if cxx.version < 'clang-3.4':
+        raise Exception('Clang 3.4 or later is required.')
 
     if cxx.like('gcc'):
       self.configure_gcc(cxx)
-    elif cxx.vendor == 'msvc':
+    elif cxx.family == 'msvc':
       self.configure_msvc(cxx)
 
     # Optimization
@@ -85,7 +126,6 @@ class ExtensionConfig(object):
       '_snprintf=snprintf',
       '_vsnprintf=vsnprintf',
       'HAVE_STDINT_H',
-      'HAVE_STRING_H',
       'GNUC',
     ]
     cxx.cflags += [
@@ -97,11 +137,15 @@ class ExtensionConfig(object):
       '-Wno-switch',
       '-Wno-array-bounds',
       '-msse',
-      '-m32',
       '-fvisibility=hidden',
     ]
+
+    if cxx.version == 'apple-clang-6.0' or cxx.version == 'clang-3.4':
+      cxx.cxxflags += ['-std=c++1y']
+    else:
+      cxx.cxxflags += ['-std=c++14']
+
     cxx.cxxflags += [
-      '-std=c++14',
       '-fno-exceptions',
       '-fno-threadsafe-statics',
       '-Wno-non-virtual-dtor',
@@ -109,12 +153,16 @@ class ExtensionConfig(object):
       '-fvisibility-inlines-hidden',
     ]
 
-    have_gcc = cxx.vendor == 'gcc'
-    have_clang = cxx.vendor == 'clang'
-    if cxx.version >= 'clang-3.6':
+    have_gcc = cxx.family == 'gcc'
+    have_clang = cxx.family == 'clang'
+    if cxx.version >= 'clang-3.9' or cxx.version == 'clang-3.4' or cxx.version > 'apple-clang-6.0':
+      cxx.cxxflags += ['-Wno-expansion-to-defined']
+    if cxx.version == 'clang-3.9' or cxx.version == 'apple-clang-8.0':
+      cxx.cflags += ['-Wno-varargs']
+    if cxx.version >= 'clang-3.4' or cxx.version >= 'apple-clang-7.0':
       cxx.cxxflags += ['-Wno-inconsistent-missing-override']
-    if cxx.version >= 'clang-10.0':
-      cxx.cxxflags += ['-Wno-implicit-int-float-conversion', '-Wno-expansion-to-defined']
+    if cxx.version >= 'clang-2.9' or cxx.version >= 'apple-clang-3.0':
+      cxx.cxxflags += ['-Wno-null-dereference']
     if have_clang or (cxx.version >= 'gcc-4.6'):
       cxx.cflags += ['-Wno-narrowing']
     if have_clang or (cxx.version >= 'gcc-4.7'):
@@ -139,6 +187,8 @@ class ExtensionConfig(object):
     if builder.options.opt == '1':
       cxx.cflags += ['-O3']
 
+    # This needs to be after our optimization flags which could otherwise disable it.
+    # Don't omit the frame pointer.
     cxx.cflags += ['-fno-omit-frame-pointer']
 
   def configure_msvc(self, cxx):
@@ -162,7 +212,6 @@ class ExtensionConfig(object):
       '/TP',
     ]
     cxx.linkflags += [
-      '/MACHINE:X86',
       'kernel32.lib',
       'user32.lib',
       'gdi32.lib',
@@ -191,10 +240,11 @@ class ExtensionConfig(object):
   def configure_linux(self, cxx):
     cxx.defines += ['_LINUX', 'POSIX']
     cxx.linkflags += ['-Wl,--exclude-libs,ALL', '-lm']
-    if cxx.vendor == 'gcc':
+    if cxx.family == 'gcc':
       cxx.linkflags += ['-static-libgcc']
-    elif cxx.vendor == 'clang':
+    elif cxx.family == 'clang':
       cxx.linkflags += ['-lgcc_eh']
+    cxx.linkflags += ['-static-libstdc++']
 
   def configure_mac(self, cxx):
     cxx.defines += ['OSX', '_OSX', 'POSIX']
@@ -220,8 +270,19 @@ class ExtensionConfig(object):
     ]
     return compiler
 
+  def Library(self, context, compiler, name):
+    compiler = compiler.clone()
+    SetArchFlags(compiler)
+    self.ConfigureForExtension(context, compiler)
+    return compiler.Library(name)
+
+  def StaticLibrary(self, context, compiler, name):
+    compiler = compiler.clone()
+    SetArchFlags(compiler)
+    return compiler.StaticLibrary(name)
+
 Extension = ExtensionConfig()
-Extension.detectSDKs()
+Extension.detectSourceMod()
 Extension.configure()
 
 # This will clone the list and each cxx object as we recurse, preventing child
@@ -238,4 +299,4 @@ if builder.backend == 'amb2':
     'PackageScript',
   ]
 
-builder.RunBuildScripts(BuildScripts, { 'Extension': Extension })
+builder.Build(BuildScripts, {'Extension': Extension})
