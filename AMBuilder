@@ -4,7 +4,7 @@ iimport os, sys
 projectName = 'geoip2'
 
 for cxx in builder.targets:
-  binary = Extension.Library(builder, cxx, 'geoip.ext')
+  binary = Extension.Library(builder, cxx, projectName + '.ext')
 
   binary.sources += [
     'extension.cpp',
