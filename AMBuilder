@@ -1,5 +1,5 @@
 # vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
-import os
+import os, sys
 
 binary = builder.compiler.Library('geoip2.ext')
 
