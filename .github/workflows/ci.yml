@@ -18,12 +18,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-2019]
         sourcemod-version: [1.10-dev]
-        include:
-          - os: ubuntu-latest
-            target-archs: x86
-
-          - os: windows-latest
-            target-archs: x86
+        target-archs: x86
 
     steps:
       - name: Install Linux packages
