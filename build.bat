@@ -40,6 +40,6 @@ cd %EXT_DIR%
 
 mkdir build
 pushd build
-python "%EXT_DIR%/configure.py" --enable-optimize --sm-path "%SOURCEMOD%" --targets=x86
+python "%EXT_DIR%/configure.py" --enable-optimize --targets=x86 --sm-path "%SOURCEMOD%"
 ambuild
 popd

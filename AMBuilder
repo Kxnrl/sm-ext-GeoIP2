@@ -1,5 +1,5 @@
 # vim: set sts=2 ts=8 sw=2 tw=99 et ft=python:
-iimport os, sys
+iimport os
 
 projectName = 'geoip2'
 
