@@ -21,4 +21,4 @@ for cxx in builder.targets:
   if binary.compiler.target.platform == 'windows':
     binary.compiler.postlink += ['wsock32.lib', 'ws2_32.lib']
 
-Extension.extensions = builder.Add(project)
+  Extension.extensions += [builder.Add(binary)]
