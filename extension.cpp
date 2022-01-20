@@ -87,7 +87,7 @@ static cell_t sm_Geoip_Code2(IPluginContext *pCtx, const cell_t *params)
 	std::string str = lookupString(ip, path);
 	const char *ccode = str.c_str();
 
-	pCtx->StringToLocal(params[2], 3, ccode);
+	pCtx->StringToLocalUTF8(params[2], 3, ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -112,7 +112,7 @@ static cell_t sm_Geoip_Code3(IPluginContext *pCtx, const cell_t *params)
 		}
 	}
 
-	pCtx->StringToLocal(params[2], 4, ccode);
+	pCtx->StringToLocalUTF8(params[2], 4, ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -128,7 +128,7 @@ static cell_t sm_Geoip_ContinentCode(IPluginContext *pCtx, const cell_t *params)
 	std::string str = lookupString(ip, path);
 	const char *ccode = str.c_str();
 
-	pCtx->StringToLocal(params[2], 3, ccode);
+	pCtx->StringToLocalUTF8(params[2], 3, ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -144,7 +144,7 @@ static cell_t sm_Geoip_RegionCode(IPluginContext *pCtx, const cell_t *params)
 	std::string str = lookupString(ip, path);
 	const char *ccode = str.c_str();
 
-	pCtx->StringToLocal(params[2], 4, ccode);
+	pCtx->StringToLocalUTF8(params[2], 4, ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -160,7 +160,7 @@ static cell_t sm_Geoip_Timezone(IPluginContext *pCtx, const cell_t *params)
 	std::string str = lookupString(ip, path);
 	const char *ccode = str.c_str();
 
-	pCtx->StringToLocal(params[2], params[3], ccode);
+	pCtx->StringToLocalUTF8(params[2], params[3], ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -180,7 +180,7 @@ static cell_t sm_Geoip_Country(IPluginContext *pCtx, const cell_t *params)
 	std::string str = lookupString(ip, path);
 	const char *ccode = str.c_str();
 
-	pCtx->StringToLocal(params[2], params[3], ccode);
+	pCtx->StringToLocalUTF8(params[2], params[3], ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -200,7 +200,7 @@ static cell_t sm_Geoip_Continent(IPluginContext *pCtx, const cell_t *params)
 	std::string str = lookupString(ip, path);
 	const char *ccode = str.c_str();
 
-	pCtx->StringToLocal(params[2], params[3], ccode);
+	pCtx->StringToLocalUTF8(params[2], params[3], ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -220,7 +220,7 @@ static cell_t sm_Geoip_Region(IPluginContext *pCtx, const cell_t *params)
 	std::string str = lookupString(ip, path);
 	const char *ccode = str.c_str();
 
-	pCtx->StringToLocal(params[2], params[3], ccode);
+	pCtx->StringToLocalUTF8(params[2], params[3], ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -240,7 +240,7 @@ static cell_t sm_Geoip_City(IPluginContext *pCtx, const cell_t *params)
 	std::string str = lookupString(ip, path);
 	const char *ccode = str.c_str();
 
-	pCtx->StringToLocal(params[2], params[3], ccode);
+	pCtx->StringToLocalUTF8(params[2], params[3], ccode, nullptr);
 
 	return (strlen(ccode) != 0) ? 1 : 0;
 }
@@ -258,4 +258,3 @@ const sp_nativeinfo_t geoip_natives[] =
 	{"GeoIP2_City",			    sm_Geoip_City},
 	{NULL,					    NULL},
 };
-
