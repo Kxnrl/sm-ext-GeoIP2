@@ -11,6 +11,7 @@
 #ifdef _WIN32
 #define MMDB_UINT128_IS_BYTE_ARRAY 1
 #else
+#define MMDB_UINT128_IS_BYTE_ARRAY 1
 /* #undef MMDB_UINT128_IS_BYTE_ARRAY */
 #endif
 #endif
