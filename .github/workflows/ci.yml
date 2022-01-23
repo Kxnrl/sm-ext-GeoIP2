@@ -32,13 +32,17 @@ jobs:
           sudo apt update
           sudo apt install -yq --no-install-recommends g++-multilib
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
           path: extension
+      
+      - name: Checkout MetaMod
+        uses: actions.checkout@v2
+        with:
+            repository: alliedmodders/metamod-source
+            path: metamod-source
+            submodules: recursive
 
       - name: Checkout SourceMod
         uses: actions/checkout@v2
@@ -48,21 +52,11 @@ jobs:
           path: sourcemod
           submodules: recursive
 
-      - name: Checkout AMBuild
-        uses: actions/checkout@v2
-        with:
-          repository: alliedmodders/ambuild
-          path: ambuild
 
-      - name: Install AMBuild
-        uses: BSFishy/pip-action@v1
-        with:
-          packages: ./ambuild
-
-      - name: Build
+      - name: Build (Linux)
         working-directory: extension
-        shell: bash
+        if: runner.OS == 'Linux'
         run: |
-          mkdir build && cd build
-          python ../configure.py --enable-optimize --targets=${{ matrix.target-archs }}
-          ambuild
+            mkdir build; cd build;
+            cmake -DUSE_SDK=OFF -DTARGET_ARCH=x86 -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ../
+            cmake --build . --config Release -j 8
