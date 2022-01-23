@@ -1,13 +1,22 @@
 # GeoIP2
 This is a rewritten geoip extension from the SourceMod distribution for the new database format from MaxMind `.mmdb`.
-Redux edition by Kxnrl.  
-  
+Redux edition by Kxnrl.
   
 ## Installation
 1. Download latest release version and extra to game extension folder.
 2. Download latest database GeoLite2-City.mmdb or [GeoLite2-Country.mmdb] and put to path `addons/sourcemod/configs/geoip/`
   
-  
+## Build instruction
+1. `git clone https://github.com/Kxnrl/sm-ext-GeoIP2.git` (HTTP) or `git clone git@github.com:Kxnrl/sm-ext-GeoIP2.git` (SSH)
+2. `git submodule update --init --recursive`
+3. `mkdir build; cd build;` (Bash/Powershell)
+4. Configure: Different platform has different instructions.
+    - Windows: `cmake -G "Visual Studio 17 2022" -A Win32 -DUSE_SDK=OFF -DSM_USE_VENDOR=OFF -DMMS_USE_VENDOR=OFF -DTARGET_ARCH=x86 -DBUILD_TESTING=OFF ../`
+    - Linux: `cmake -DUSE_SDK=OFF -DSM_USE_VENDOR=OFF -DMMS_USE_VENDOR=OFF -DTARGET_ARCH=x86 -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ../`
+5. Build: Different platform has different instructions.
+    - Windows: `cmake --build . --config Release`
+    - Linux: `cmake --build . --config Release -j NumOfThreads` (NumOfThreads: How many thread you want to use to build)
+
 ## Natives
 
 ``` sourcepawn
