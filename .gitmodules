@@ -1,0 +1,6 @@
+[submodule "amsdk-cmake"]
+	path = amsdk-cmake
+	url = git@github.com:laper32/amsdk-cmake.git
+[submodule "src/3rdparty/libmaxminddb"]
+	path = src/3rdparty/libmaxminddb
+	url = https://github.com/maxmind/libmaxminddb.git

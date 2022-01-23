@@ -1,6 +1,11 @@
-#include "geoip_util.h"
+#ifndef _INCLUDE_SOURCEMOD_GEOIPUTIL_H_
+#define _INCLUDE_SOURCEMOD_GEOIPUTIL_H_
+
+// Why this guy spilt implementation and declaration?
 
 #include <string>
+
+#include "extension.h"
 
 const char GeoIPCountryCode[252][3] =
 {
@@ -62,7 +67,7 @@ const char GeoIPCountryCode3[252][4] =
 	"BLM", "MAF"
 };
 
-bool lookupByIp(const char *ip, const char **path, MMDB_entry_data_s *result)
+inline bool lookupByIp(const char* ip, const char** path, MMDB_entry_data_s* result)
 {
 	int gai_error = 0, mmdb_error = 0;
 	MMDB_lookup_result_s lookup = MMDB_lookup_string(&mmdb, ip, &gai_error, &mmdb_error);
@@ -85,7 +90,7 @@ bool lookupByIp(const char *ip, const char **path, MMDB_entry_data_s *result)
 	return true;
 }
 
-std::string lookupString(const char *ip, const char **path)
+inline std::string lookupString(const char* ip, const char** path)
 {
 	MMDB_entry_data_s result;
 
@@ -96,3 +101,5 @@ std::string lookupString(const char *ip, const char **path)
 
 	return std::string(result.utf8_string, result.data_size);
 }
+
+#endif // _INCLUDE_SOURCEMOD_GEOIPUTIL_H_
