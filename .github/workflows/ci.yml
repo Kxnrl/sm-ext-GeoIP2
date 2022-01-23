@@ -38,7 +38,7 @@ jobs:
           path: extension
       
       - name: Checkout MetaMod
-        uses: actions.checkout@v2
+        uses: actions/checkout@v2
         with:
             repository: alliedmodders/metamod-source
             path: metamod-source
