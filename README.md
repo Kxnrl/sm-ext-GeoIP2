@@ -1,6 +1,8 @@
 # GeoIP2
 This is a rewritten geoip extension from the SourceMod distribution for the new database format from MaxMind `.mmdb`.
-Redux edition by Kxnrl.
+Redux edition credits:
+- Kxnrl
+- laper32
   
 ## Installation
 1. Download latest release version and extra to game extension folder.
@@ -16,6 +18,11 @@ Redux edition by Kxnrl.
 5. Build: Different platform has different instructions.
     - Windows: `cmake --build . --config Release`
     - Linux: `cmake --build . --config Release -j NumOfThreads` (NumOfThreads: How many thread you want to use to build)
+
+N.B.: 
+1. Instructions above requires you to predefine `SOURCEMOD` and `METAMOD_SOURCE` environment variables.
+2. Indeed, you can still not using environment variables to build this extension, but requires you place sm and mm at the root of the project.
+3. Noting that submodules are using SSH clone, make sure **YOU HAVE BEEN PRECONFIGURED SSH KEY!**
 
 ## Natives
 
