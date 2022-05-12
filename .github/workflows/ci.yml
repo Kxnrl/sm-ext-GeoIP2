@@ -53,8 +53,7 @@ jobs:
           submodules: recursive
 
 
-      - name: Build (Linux)
-        if: runner.OS == 'Linux'
+      - name: Build
         run: |
             mkdir build; cd build;
             cmake -DUSE_SDK=OFF -DTARGET_ARCH=x86 -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ../
