@@ -59,3 +59,11 @@ jobs:
             mkdir build; cd build;
             cmake -DUSE_SDK=OFF -DTARGET_ARCH=x86 -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ../
             cmake --build . --config Release -j 8
+            
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build
+          path: |
+            **/*.ext.dll
+            **/*.ext.so
